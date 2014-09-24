@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>TESTING</title>
+	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<script src="jq.js"></script>
+	<style type="text/css">
+		body {
+			font-family: 'Roboto', sans-serif;
+		}
+		.svg {
+			background: gainsboro;
+		}
+	</style>
+	<script type="text/javascript">
+		var width  = 200;
+		var height = 155;
+
+		var rpm = 1000
+		var maxrpm = 6000
+
+
+		function redraw() {
+			width = Math.floor(($('#widthslider').val()/10))*10;
+			height = Math.floor(($('#heightslider').val()/10))*10;
+
+			rpm = $('#rpmslider').val()*maxrpm;
+
+			if(width > height){
+				$('#svg').attr('width',width);
+				$('#svg').css('width',width);
+				$('#svg').attr('height',height);
+				$('#svg').css('height',height);
+
+				$('#outer').attr('width',width-(width*0.2));
+				$('#outer').attr('x',width*0.1);
+
+				$('#outer').attr('height',height-(height*0.4));
+				$('#outer').attr('y',height*0.1);
+
+				$('#inner').attr('width',(width-(width*0.2))*rpm/maxrpm);
+				$('#inner').attr('x',width*0.1);
+
+				$('#inner').attr('height',height-(height*0.4));
+				$('#inner').attr('y',height*0.1);
+
+				//################
+				$('#minrpm').attr('x',(width*0.1));
+				$('#minrpm').attr('y',height-(height*0.1));
+				$('#minrpm').css('font-size',Math.min(height*0.2, width*0.08));
+
+				//################
+				$('#maxrpm').attr('x',width-(width*0.1));
+				$('#maxrpm').attr('y',height-(height*0.1));
+				$('#maxrpm').html(maxrpm);
+				$('#maxrpm').css('font-size',Math.min(height*0.2, width*0.08));
+
+				//################
+				$('#currpm').attr('x',width*0.5);
+				$('#currpm').attr('y',height*0.5-height*0.1);
+				$('#currpm').html(rpm.toFixed(0));
+				$('#currpm').css('font-size',Math.min(height*0.4, width*0.2));
+
+				$('#inner').attr('transform','rotate(0 0 0)');
+
+
+			} else { // ################################################################
+				$('#svg').attr('width',width);
+				$('#svg').css('width',width);
+				$('#svg').attr('height',height);
+				$('#svg').css('height',height);
+
+				$('#outer').attr('width',width-(width*0.2));
+				$('#outer').attr('x',width*0.1);
+
+				$('#outer').attr('height',height-(height*0.2));
+				$('#outer').attr('y',height*0.1);
+
+				$('#inner').attr('width',(width-(width*0.2)));
+				$('#inner').attr('x',width*0.1);
+
+				$('#inner').attr('height',height*rpm/maxrpm-(height*0.2)*rpm/maxrpm);
+				$('#inner').attr('y',height*0.1);
+
+				$('#inner').attr('transform','rotate(180 '+width/2+' '+height/2+')');
+
+				//################
+				$('#minrpm').attr('x',(width*0.5));
+				$('#minrpm').attr('y',height*0.95);
+				$('#minrpm').css('font-size',Math.min(height*0.1, width*0.3));
+
+				//################
+				$('#maxrpm').attr('x',width*0.5);
+				$('#maxrpm').attr('y',height*0.05);
+				$('#maxrpm').html(maxrpm);
+				$('#maxrpm').css('font-size',Math.min(height*0.1, width*0.3));
+
+				//################
+				$('#currpm').attr('x',width*0.5);
+				$('#currpm').attr('y',height*0.5);
+				$('#currpm').html(rpm.toFixed(0));
+				$('#currpm').css('font-size',Math.min(height*0.1, width*0.3));
+			}
+		}
+
+		$( document ).ready(function() {
+
+			$('<svg id="svg" class="svg" width="' +width+ '" height="' +height+ '"></svg>').appendTo($('body'));
+
+			if(width > height){
+				$('<rect id="outer" fill="rgba(0,0,0,0)" stroke-width="1" stroke="#000" />').appendTo($('#svg'));
+				$('<rect id="inner" fill="rgba(0,0,128,0.5)" stroke-width="1" stroke="#000" />').appendTo($('#svg'));
+				$('<text id="minrpm" dominant-baseline="central" fill="#000" text-anchor="middle">0000</text>').appendTo($('#svg'));
+				$('<text id="maxrpm" dominant-baseline="central" fill="#000" text-anchor="middle">0000</text>').appendTo($('#svg'));
+				$('<text id="currpm" dominant-baseline="central" fill="#000" text-anchor="middle">0000</text>').appendTo($('#svg'));
+			}
+
+			redraw()
+			$("body").html($("body").html());
+		});
+
+	</script>
+</head>
+
+<body>
+	<input id="widthslider" type="range" value="200" max="500" min="50" oninput="redraw();" />
+	<input id="heightslider" type="range" value="300" max="500" min="50" oninput="redraw();" /> <br>
+	<input id="rpmslider" type="range" value="0.5" max="1" min="0" step="0.001" oninput="redraw();" /> <br>
+</body>
+</html>
